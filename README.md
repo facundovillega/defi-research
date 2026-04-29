@@ -67,23 +67,23 @@ All queries are public at [dune.com/facundovillega/dunedash](https://dune.com/fa
 
 | Query | Purpose | Paper section |
 |---|---|---|
-| `PIT_11_delta_por_umbral_v1.sql` | delta robustness across fi ∈ {0.25, 0.50, 1.00} | Table A1 / §9.1 |
-| `PIT_A1_composicion_pot_v1.sql` | Pot stock composition by agent class | §9.1, Cuadro 1 |
-| `PIT_13_flujos_por_clase_v1.sql` | Daily flows by agent class + DSR | §9.1, P3 |
+| `PIT_11_delta_por_umbral_v1.sql` | delta robustness across fi ∈ {0.25, 0.50, 1.00} | Table A1 / §9.2 |
+| `PIT_A1_composicion_pot_v1.sql` | Pot stock composition by agent class | §9.2, Cuadro 1 |
+| `PIT_13_flujos_por_clase_v1.sql` | Daily flows by agent class + DSR | §9.3, P1 |
 
 ### DSR/SSR Flows and Spread
 
 | Query | Purpose | Paper section |
 |---|---|---|
-| `PIT_14_flujos_netos_DSR_SSR_v1.sql` | Net daily flows by canal + DSR/SSR | §9.3, P5 |
-| `PIT_A3_flujos_DSR_SSR_v2.sql` | Daily join flows by canal + MA7 | §9.3, Cuadro 3 |
-| `PIT_A4_datos_regresion_v1.sql` | Regression panel: flow + DSR/SSR spread | §9.3, P5 |
+| `PIT_14_flujos_netos_DSR_SSR_v1.sql` | Net daily flows by canal + DSR/SSR | §9.4, P5 |
+| `PIT_A3_flujos_DSR_SSR_v2.sql` | Daily join flows by canal + MA7 | §9.4, Cuadro 3 |
+| `PIT_A4_datos_regresion_v1.sql` | Regression panel: flow + DSR/SSR spread | §9.4, P5 |
 
 ### Surplus Buffer and Governance
 
 | Query | Purpose | Paper section |
 |---|---|---|
-| `PIT_A5_ccf_flap_dsr_v1.sql` | CCF: flap auctions vs DSR lag structure | §9.4 |
+| `PIT_A5_ccf_flap_dsr_v1.sql` | CCF: flap auctions vs DSR lag structure | §9.5 |
 | `gsm_spells_por_anio.sql` | Spell frequency by year (GSM activity) | §4.3, Tabla 4.1 |
 
 ### Cascade Liquidations
@@ -177,7 +177,7 @@ Output: `plots/08_figura_stock_spread_regimen.png`
 ### `09_regresion_elasticidades_clase.R` — elasticities by agent class
 Downloads daily flows by class from Dune (query 7351061) and runs three OLS models with Newey-West HAC (lag=7): APD_formal only, Discrecional only, and pooled with interaction term.
 
-Key result: `dsr_interac` not significant (p=0.869) — elasticities statistically indistinguishable between classes in daily flows. Evidence for P3 resides in Ein/Eout ratio = 8.44 (Cuadro 2).
+Key result: `dsr_interac` not significant (p=0.869) — elasticities statistically indistinguishable between classes in daily flows. Evidence for P1 resides in Ein/Eout ratio = 8.44 (Cuadro 2).
 
 Output: `results/09_regresion_elasticidades_clase.txt`
 
@@ -186,7 +186,7 @@ Output: `results/09_regresion_elasticidades_clase.txt`
 ### `10_correlacion_spells_inercia.R` — spells/year vs inertia duration
 Computes Pearson and Spearman correlations between annual spell count and average inertia duration (2020–2026).
 
-Key result: Spearman rho = -1.000, p < 0.001 — monotonic correlation, direct evidence for P3.
+Key result: Spearman rho = -1.000, p < 0.001 — monotonic correlation, direct evidence for P1.
 
 Output: `results/10_correlacion_spells_inercia.txt`
 
@@ -217,7 +217,7 @@ Output: `plots/12_flujos_DSR_SSR.png`
 The paper derives deposit persistence under negative spread as a predictable consequence of optimal APD design, formalized as an (S,s) inventory policy problem with asymmetric activation costs:
 
 - **Lemma 1** (Asymmetric Irreversibility): θ_out < θ_in → endogenous inertia band
-- **Lemma 2** (Marginal Insensitivity): d(φ_i)/d(r) = 0 in the active region
+- **Lemma 2** (Saturating Threshold Policy): d(φ_i)/d(r) = 0 in the active region
 - **Lemma 3** (Endogenous Concentration): n* ≤ D_total · r̄ / (ρ·K) → 2 APDs hold 86% of stock
 
 Five falsifiable propositions follow, validated on MakerDAO Pot microdata (January 2023 – April 2026).
