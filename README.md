@@ -123,15 +123,19 @@ Period: 2020-01-27 to 2025-11-03 · 138 weeks · 28 DSR change events
 ---
 
 ### `03_dsr_spread.R` — DSR/Aave USDC spread as DSR predictor
-Multiple regression of DSR on flap auction count and DSR–Aave USDC spread.
+Multiple regression of DSR on flap auction count and DSR–Aave USDC spread. Newey-West HAC standard errors (lag=4). Dependent variable: DSR one week ahead. Outliers excluded: 2023-07-24 and 2026-04-13.
 
-Period: July 2023 – April 2026 · 95 weeks
+Period: July 2023 – April 2026 · 144 weeks
 
-| Variable | Coefficient | p-value |
-|---|---|---|
-| flap_count | -0.0077 | < 0.001 |
-| spread (DSR–Aave USDC) | 0.7337 | < 0.001 |
-| Adjusted R² | 0.576 | — |
+| Variable | Coefficient | SE (NW, lag=4) | t-stat | p-value |
+|---|---|---|---|---|
+| spread (DSR–Aave USDC) | 0.6393 | 0.2102 | 3.04 | 0.003 |
+| flap_count | -0.0066 | 0.0039 | -1.68 | 0.096 |
+| R² | 0.3532 | — | — | — |
+| Adjusted R² | 0.3440 | — | — | — |
+| F-stat (NW) | 30.35*** | — | — | p < 0.001 |
+
+Spread is the dominant driver (R² = 0.279 in isolation). flap_count loses significance in the univariate NW model (p = 0.280) but adds 7.5 pp of R² in the joint model (p = 0.096), consistent with the Surplus Buffer acting as a second-order confirmation variable. Source: Dune Analytics query 7384994.
 
 ---
 
