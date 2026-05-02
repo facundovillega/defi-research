@@ -1,16 +1,125 @@
-# Inertial Deposits and Monetary Transmission: A Theory of Programmatic Intermediation
-### An (S,s) Model of DeFi Deposit Markets with Non-Discretionary Agents
+# defi-research
 
-**Facundo Villega · Independent Research · On-chain Analysis · April 2026**  
-Working Paper v18 · JEL: E40 · E52 · G20 · G23 · O33
+**Facundo Villega · Independent Research · On-chain Analysis · April 2026**
 
 ---
 
-## Abstract
+## Papers
 
-This repository contains the empirical analysis code for the paper *Inertial Deposits and Monetary Transmission*, which develops a formal theoretical framework for monetary markets in which a fraction λ of the deposit stock is managed by autonomous contracts — Programmatic Deposit Agents (APDs) — that execute predefined logic without continuous human intervention.
+### Paper 1 — Inertial Deposits and Monetary Transmission: A Theory of Programmatic Intermediation
 
-The empirical case is the MakerDAO Pot (2023–2026): 17.572 million DAI persistent under a negative DSR/Aave USDC spread sustained through 2H2025, with λ ≈ 0.86 and δ = 0.570 identified on Pot microdata (January 2023 – April 2026). δ is invariant to the frequency threshold fi ∈ {0.25, 0.50, 1.00} used to classify mixed agents (Table A1): the only ambiguous caller (Safe v1.1.1) has fi < 0.25 and falls deterministically into APD_formal under any threshold.
+**Working Paper v19 · JEL: E40 · E52 · G20 · G23 · O33**
+
+An (S,s) Model of DeFi Deposit Markets with Non-Discretionary Agents
+
+This paper develops a formal theoretical framework for monetary markets in which a fraction λ of the deposit stock is managed by autonomous contracts — Programmatic Deposit Agents (PDAs) — that execute predefined logic without continuous human intervention. The entry and exit thresholds of PDAs are derived as optimal solutions to an (S,s) inventory policy problem with asymmetric activation costs, not as *ad hoc* assumptions.
+
+Five propositions with quantitative and falsifiable implications are established: the entry elasticity exceeds the exit elasticity by a ratio empirically identified at 8.44; the stock persists under negative spread for a finite and derivable interval; event studies underestimate long-run passthrough by a factor proportional to 1−δ; stock variance under migration shocks is increasing in concentration; and the monetary lever of the issuer fragments when two instruments with diverging rates coexist.
+
+Empirical evidence comes from MakerDAO's Pot (2023–2025): 17.572M DAI persistent under negative DSR/Aave USDC spread in 2H2025, with λ≈0.86 and δ=0.5703 identified on sDAI microdata. The DSR/Aave USDC spread is the dominant predictor of governance adjustments (β=0.64, p=0.003, R²=0.353). The Surplus Buffer — operationalized as weekly flap auction frequency — precedes DSR adjustments with a 1-week lag.
+
+**Key parameters:**
+
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| λ | 0.86 | Programmatic fraction of Pot |
+| δ | 0.5703 | Share of stock in APD_formal accounts |
+| κ | 17.72 | OU reversion speed (half-life ≈ 2 weeks) |
+| μ | 1.08% | Long-run spread mean |
+| σ | 15.36% | Annualized spread volatility |
+| Ein/Eout | 8.44 | Entry/exit elasticity ratio |
+
+**Scripts (PIT):**
+
+| Script | Description |
+|--------|-------------|
+| `scripts/01_chi_simulation.R` | Chi accumulator simulation |
+| `scripts/02_surplus_buffer.R` | Surplus Buffer proxy via flap auctions |
+| `scripts/03_dsr_spread.R` | DSR/Aave USDC spread series |
+| `scripts/04_cascade_regression.R` | Cascade regression |
+| `scripts/05_sensibilidad_delta.R` | δ sensitivity by frequency threshold |
+| `scripts/06_regresion_spread.R` | Spread regression (H4) |
+| `scripts/07_ccf_flap_dsr.R` | Cross-correlation flap/DSR |
+| `scripts/08_figura_stock_spread_regimen.R` | Stock × spread × regime figure |
+| `scripts/09_regresion_elasticidades_clase.R` | Elasticity regression by agent class |
+| `scripts/10_correlacion_spells_inercia.R` | Spell frequency × inertia correlation |
+| `scripts/11_regresion_spread_neg_P5.R` | Negative spread regression (P5) |
+| `scripts/12_flujos_DSR_SSR.R` | DSR/SSR flow comparison |
+
+**Queries (PIT):**
+
+| Query | Description |
+|-------|-------------|
+| `queries/PIT_11_delta_por_umbral_v1.sql` | δ by frequency threshold (Table A1) |
+| `queries/PIT_13_flujos_por_clase_v1.sql` | Daily flows by agent class |
+| `queries/PIT_14_flujos_netos_DSR_SSR_v1.sql` | Net flows DSR vs SSR |
+| `queries/PIT_A1_composicion_pot_v1.sql` | Pot composition by agent type (Table 1) |
+| `queries/PIT_A3_flujos_DSR_SSR_v2.sql` | DSR/SSR flow series |
+| `queries/PIT_A4_datos_regresion_v1.sql` | Regression dataset |
+| `queries/PIT_A5_ccf_flap_dsr_v1.sql` | CCF flap × DSR dataset |
+| `queries/pot_dsr_history.sql` | Full DSR history from Pot |
+| `queries/gsm_spells_por_anio.sql` | DSPause spell count by year (Table 4.1) |
+| `queries/panel_submuestra_b_regression.sql` | Panel subsample B for regression |
+
+**Plots (PIT):**
+
+| Plot | Description |
+|------|-------------|
+| `plots/01_surplus_dsr_eventos.png` | Surplus Buffer + DSR + governance events |
+| `plots/02_correlacion_lags.png` | Lagged spread × DSR correlations (Table 4.2) |
+| `plots/03_spread_dsr_aave.png` | DSR/Aave USDC spread time series |
+| `plots/04_cooks_d_m3.png` | Cook's D — outlier diagnostics |
+| `plots/05_sensibilidad_delta.png` | δ sensitivity across thresholds |
+| `plots/08_figura_stock_spread_regimen.png` | Stock × spread by regime |
+| `plots/12_flujos_DSR_SSR.png` | Net flows DSR vs SSR |
+
+**Key contracts:**
+
+| Contract | Address |
+|----------|---------|
+| MakerDAO Pot | `0x197e90f9fad81970ba7976f33cbd77088e5d7cf7` |
+| sDAI | `0x83f20f44975d03b1b09e64809b757c47f942beea` |
+| sUSDS | `0xa3931d71877c0e7a3148cb7eb4463524fec27fbd` |
+| DSPause (GSM) | `0xbe286431454714f511008713973d3b053a2d38f3` |
+
+Dune dashboard: [dune.com/facundovillega/pitevidences9makerdao20232025](https://dune.com/facundovillega/pitevidences9makerdao20232025)
+
+---
+
+### Paper 2 — Auction Design and Market Concentration in MakerDAO Liquidations: Evidence from Black Thursday, the LUNA Crash, and the Tariff Shock
+
+**Working Paper v09 · Keywords: MakerDAO · DeFi liquidations · keeper market structure · Dutch auction · HHI · MEV**
+
+This paper studies keeper market concentration across two liquidation mechanisms in MakerDAO: the English auction (Flip, 2020–2021) and the Dutch auction (Clipper, 2021–2026). Using on-chain data from Ethereum logs and transaction traces, we document that the transition to Clipper did not reduce market concentration — it increased it substantially under extreme stress conditions.
+
+Three crisis episodes are analyzed: Black Thursday (March 2020), the LUNA Crash (May–June 2022), and the Tariff Shock (April 2025). The Herfindahl-Hirschman Index (HHI) varies dramatically across events: ~1,562 in Black Thursday, ~26 in the LUNA Crash, and ~8,371–9,546 in the Tariff Shock. This variation reveals that concentration is not a stable property of the mechanism, but a function of shock speed and intensity.
+
+The LUNA Crash — the only event with genuine access competition, with 399 keepers and HHI count ~26 — shows that Clipper can function as designed under moderate and prolonged stress. However, under instantaneous high-magnitude shocks such as the Tariff Shock, a single keeper (0xc721) captured 97.68% of the ETH liquidated in a 67-minute window. Mann-Whitney tests (Monte Carlo, 50,000 permutations) confirm statistically significant differences across events (BT vs. LUNA: p < 0.001, |r| = 0.846; LUNA vs. Tariff: p = 0.005, |r| = 0.438).
+
+The GSM's 48-hour delay — analyzed institutionally in Paper 1 — serves as the operational criterion for shock classification: events resolved before the GSM can activate are, by definition, ones against which governance has no available institutional response.
+
+**Key results by event:**
+
+| Event | Mechanism | HHI (count) | HHI (volume) | Top-1 share | Window |
+|-------|-----------|-------------|--------------|-------------|--------|
+| Black Thursday (Mar 2020) | Flip | ~1,562 | ~2,100 est. | 30.28% | 25 h |
+| LUNA Crash (May–Jun 2022) | Clipper | ~26 | ~221 | 8.70% | 56 h |
+| Tariff Shock (Apr 2025) | Clipper | ~8,371 | ~9,546 | 97.68% | 4 h (67 min active) |
+
+**Queries (Paper 2):**
+
+| Query | Description |
+|-------|-------------|
+| `queries/clipper_eth_a_cascade_intensity.sql` | Clipper ETH-A liquidation intensity by hour |
+
+**Key contracts:**
+
+| Contract | Address |
+|----------|---------|
+| Flipper ETH-A | `0xd8a04f5412223f513dc55f839574430f5ec15531` |
+| Clipper ETH-A | `0xc67963a226eddd77b91ad7c421f538d4d7b1551b` |
+| Dominant keeper — BT | `0x6066` (abbrev.) |
+| Dominant keeper — Tariff | `0xc721` (abbrev.) |
 
 ---
 
@@ -20,253 +129,74 @@ The empirical case is the MakerDAO Pot (2023–2026): 17.572 million DAI persist
 defi-research/
 ├── README.md
 ├── .gitignore
-├── data/                        # CSV exports from Dune (not versioned)
+├── data/                              # CSV exports from Dune (not versioned)
 ├── scripts/
-│   ├── 01_chi_simulation.R
-│   ├── 02_surplus_buffer.R
-│   ├── 03_dsr_spread.R
-│   ├── 04_cascade_regression.R
-│   ├── 05_sensibilidad_delta.R
-│   ├── 06_regresion_spread.R
-│   ├── 07_ccf_flap_dsr.R
-│   ├── 08_figura_stock_spread_regimen.R
-│   ├── 09_regresion_elasticidades_clase.R
-│   ├── 10_correlacion_spells_inercia.R
-│   ├── 11_regresion_spread_neg_P5.R
-│   └── 12_flujos_DSR_SSR.R
+│   ├── 01_chi_simulation.R            # PIT
+│   ├── 02_surplus_buffer.R            # PIT
+│   ├── 03_dsr_spread.R                # PIT
+│   ├── 04_cascade_regression.R        # PIT
+│   ├── 05_sensibilidad_delta.R        # PIT
+│   ├── 06_regresion_spread.R          # PIT
+│   ├── 07_ccf_flap_dsr.R              # PIT
+│   ├── 08_figura_stock_spread_regimen.R  # PIT
+│   ├── 09_regresion_elasticidades_clase.R  # PIT
+│   ├── 10_correlacion_spells_inercia.R    # PIT
+│   ├── 11_regresion_spread_neg_P5.R   # PIT
+│   └── 12_flujos_DSR_SSR.R            # PIT + Paper 2
 ├── queries/
-│   ├── PIT_11_delta_por_umbral_v1.sql
-│   ├── PIT_13_flujos_por_clase_v1.sql
-│   ├── PIT_14_flujos_netos_DSR_SSR_v1.sql
-│   ├── PIT_A1_composicion_pot_v1.sql
-│   ├── PIT_A3_flujos_DSR_SSR_v2.sql
-│   ├── PIT_A4_datos_regresion_v1.sql
-│   ├── PIT_A5_ccf_flap_dsr_v1.sql
-│   ├── clipper_eth_a_cascade_intensity.sql
-│   ├── gsm_spells_por_anio.sql
-│   ├── panel_submuestra_b_regression.sql
-│   └── pot_dsr_history.sql
+│   ├── PIT_11_delta_por_umbral_v1.sql        # PIT — Table A1
+│   ├── PIT_13_flujos_por_clase_v1.sql        # PIT — Table 1
+│   ├── PIT_14_flujos_netos_DSR_SSR_v1.sql    # PIT — DSR/SSR flows
+│   ├── PIT_A1_composicion_pot_v1.sql         # PIT — Pot composition
+│   ├── PIT_A3_flujos_DSR_SSR_v2.sql          # PIT
+│   ├── PIT_A4_datos_regresion_v1.sql         # PIT — H4 dataset
+│   ├── PIT_A5_ccf_flap_dsr_v1.sql            # PIT — CCF dataset
+│   ├── clipper_eth_a_cascade_intensity.sql   # Paper 2 — Tariff Shock
+│   ├── gsm_spells_por_anio.sql               # PIT — Table 4.1
+│   ├── panel_submuestra_b_regression.sql     # PIT
+│   └── pot_dsr_history.sql                   # PIT
 ├── plots/
-│   ├── 01_surplus_dsr_eventos.png
-│   ├── 02_correlacion_lags.png
-│   ├── 03_spread_dsr_aave.png
-│   ├── 04_cooks_d_m3.png
-│   ├── 05_sensibilidad_delta.png
-│   ├── 08_figura_stock_spread_regimen.png
-│   └── 12_flujos_DSR_SSR.png
+│   ├── 01_surplus_dsr_eventos.png     # PIT
+│   ├── 02_correlacion_lags.png        # PIT — Table 4.2
+│   ├── 03_spread_dsr_aave.png         # PIT
+│   ├── 04_cooks_d_m3.png              # PIT
+│   ├── 05_sensibilidad_delta.png      # PIT
+│   ├── 08_figura_stock_spread_regimen.png  # PIT
+│   └── 12_flujos_DSR_SSR.png          # PIT + Paper 2
 └── results/
 ```
 
 ---
 
-## Dune Analytics Queries
+## Theoretical Connection Between Papers
 
-All queries are public at [dune.com/facundovillega/dunedash](https://dune.com/facundovillega/dunedash).
+Both papers study the same protocol (MakerDAO) through complementary lenses:
 
-### Core Identification
+**Paper 1 (PIT)** models the deposit layer: why programmatic agents (PDAs) maintain deposits under negative spread, and why the issuer's monetary lever fragments.
 
-| Query | Purpose | Paper section |
-|---|---|---|
-| `PIT_11_delta_por_umbral_v1.sql` | delta robustness across fi ∈ {0.25, 0.50, 1.00} | Table A1 / §9.2 |
-| `PIT_A1_composicion_pot_v1.sql` | Pot stock composition by agent class | §9.2, Cuadro 1 |
-| `PIT_13_flujos_por_clase_v1.sql` | Daily flows by agent class + DSR | §9.3, P1 |
+**Paper 2 (Liquidations)** models the liquidation layer: why keeper market concentration is not a stable property of the mechanism but a function of shock speed.
 
-### DSR/SSR Flows and Spread
+The structural link is **Lemma 3 of PIT**: the fixed integration cost K predicts endogenous low n* and concentration. In the deposit layer, K is the cost of deploying and auditing a PDA contract (n*=2: sDAI and Spark). In the liquidation layer, K is MEV execution infrastructure cost (n*≈1 under instantaneous shocks: 0xc721 in the Tariff Shock). The mechanism is the same; the layer is different.
 
-| Query | Purpose | Paper section |
-|---|---|---|
-| `PIT_14_flujos_netos_DSR_SSR_v1.sql` | Net daily flows by canal + DSR/SSR | §9.4, P5 |
-| `PIT_A3_flujos_DSR_SSR_v2.sql` | Daily join flows by canal + MA7 | §9.4, Cuadro 3 |
-| `PIT_A4_datos_regresion_v1.sql` | Regression panel: flow + DSR/SSR spread | §9.4, P5 |
-
-### Surplus Buffer and Governance
-
-| Query | Purpose | Paper section |
-|---|---|---|
-| `PIT_A5_ccf_flap_dsr_v1.sql` | CCF: flap auctions vs DSR lag structure | §9.5 |
-| `gsm_spells_por_anio.sql` | Spell frequency by year (GSM activity) | §4.3, Tabla 4.1 |
-
-### Cascade Liquidations
-
-| Query | Purpose | Paper section |
-|---|---|---|
-| `panel_submuestra_b_regression.sql` | Monthly panel Submuestra B (N=36) | §9.4, Section V |
-| `clipper_eth_a_cascade_intensity.sql` | Cascade intensity: kicks + DAI per month | Section V |
-
-### Rates and Stock
-
-| Query | Purpose | Paper section |
-|---|---|---|
-| `pot_dsr_history.sql` | DSR historical series (complete) | §9.2, §9.4 |
+The **GSM's 48-hour delay** appears in both papers: as the operational criterion for shock classification in Paper 2, and as the institutional constraint that lengthens PDA inertia intervals in Paper 1.
 
 ---
 
-## Scripts
+## Data Sources
 
-### `01_chi_simulation.R` — chi accumulator simulation
-Simulates chi accumulator dynamics under the Pot contract. Validates the continuous compounding logic of `drip()` and the normalization between `pie` (internal units) and DAI (external units).
-
----
-
-### `02_surplus_buffer.R` — Surplus Buffer as DSR leading indicator
-Analyzes whether weekly flap auction frequency precedes DSR adjustments.
-
-Period: 2020-01-27 to 2025-11-03 · 138 weeks · 28 DSR change events
-
-| Metric | Value |
-|---|---|
-| Optimal lag | 1 week |
-| Correlation | -0.2169 |
-| Adjusted R² | 0.04 |
-| p-value | 0.011 |
+- **Dune Analytics:** primary source for all on-chain data. Public dashboard: [dune.com/facundovillega/pitevidences9makerdao20232025](https://dune.com/facundovillega/pitevidences9makerdao20232025)
+- **DeFi Llama yields API:** Aave USDC V3 rate series (`script 03_dsr_spread.R`)
+- **Ethereum mainnet:** `ethereum.logs`, `ethereum.transactions`, `ethereum.traces`, `erc20_ethereum.evt_transfer`
+- **MakerDAO-specific tables:** `maker_ethereum.Pot_call_join`, `maker_ethereum.Vow_call_flap`, `maker_ethereum.Pot_call_file`, `sky_ethereum.susds_call_ssr`
 
 ---
 
-### `03_dsr_spread.R` — DSR/Aave USDC spread as DSR predictor
-Multiple regression of DSR on flap auction count and DSR–Aave USDC spread. Newey-West HAC standard errors (lag=4). Dependent variable: DSR one week ahead. Outliers excluded: 2023-07-24 and 2026-04-13.
+## Citation
 
-Period: July 2023 – April 2026 · 144 weeks
+Villega, F. (2026a). *Inertial Deposits and Monetary Transmission: A Theory of Programmatic Intermediation*. Working Paper v19. Independent Research.
 
-| Variable | Coefficient | SE (NW, lag=4) | t-stat | p-value |
-|---|---|---|---|---|
-| spread (DSR–Aave USDC) | 0.6393 | 0.2102 | 3.04 | 0.003 |
-| flap_count | -0.0066 | 0.0039 | -1.68 | 0.096 |
-| R² | 0.3532 | — | — | — |
-| Adjusted R² | 0.3440 | — | — | — |
-| F-stat (NW) | 30.35*** | — | — | p < 0.001 |
-
-Spread is the dominant driver (R² = 0.279 in isolation). flap_count loses significance in the univariate NW model (p = 0.280) but adds 7.5 pp of R² in the joint model (p = 0.096), consistent with the Surplus Buffer acting as a second-order confirmation variable. Source: Dune Analytics query 7384994.
+Villega, F. (2026b). *Auction Design and Market Concentration in MakerDAO Liquidations: Evidence from Black Thursday, the LUNA Crash, and the Tariff Shock*. Working Paper v09. Independent Research.
 
 ---
 
-### `04_cascade_regression.R` — cascade liquidations panel
-Panel regression on cascade liquidation intensity (Submuestra B: N=36, January 2023 – February 2026). Dependent variable: log kicks per period. HC3 robust standard errors. Two observations excluded as discretionary governance decisions (September 2024 anomaly; May 2025 peak: 28 kicks / 92M DAI).
-
----
-
-### `05_sensibilidad_delta.R` — sensitivity of Ein/Eout and P3 bias
-Plots Figure A1: sensitivity of the Ein/Eout ratio and P3 bias as a function of delta, with lambda = 0.86 fixed. Marks the empirical delta = 0.570 on the curve.
-
-Output: `plots/05_sensibilidad_delta.png`
-
----
-
-### `06_regresion_spread.R` — regression flow_dsr ~ spread
-OLS regression of daily DSR_sDAI flows on DSR/SSR spread with Newey-West HAC standard errors (lag=7). Two models: spread only (M3), spread + controls (M4).
-
-Input: Dune query 7338580  
-Output: `results/06_regresion_spread_resultados.txt`
-
----
-
-### `07_ccf_flap_dsr.R` — CCF flap auctions vs DSR
-Downloads weekly panel from Dune (query 6980514) and computes cross-correlation function between flap auction count and DSR for lags 1–12 weeks.
-
-Output: `plots/02_correlacion_lags.png`
-
----
-
-### `08_figura_stock_spread_regimen.R` — Figure 5.1: Pot stock + spread
-Downloads daily Pot stock from Dune (query 6853568), merges with hardcoded DSR/SSR change dates, and plots Figure 5.1 with dual y-axis (stock left, spread right).
-
-Input: Dune query 6853568  
-Output: `plots/08_figura_stock_spread_regimen.png`
-
----
-
-### `09_regresion_elasticidades_clase.R` — elasticities by agent class
-Downloads daily flows by class from Dune (query 7351061) and runs three OLS models with Newey-West HAC (lag=7): APD_formal only, Discrecional only, and pooled with interaction term.
-
-Key result: `dsr_interac` not significant (p=0.869) — elasticities statistically indistinguishable between classes in daily flows. Evidence for P1 resides in Ein/Eout ratio = 8.44 (Cuadro 2).
-
-Output: `results/09_regresion_elasticidades_clase.txt`
-
----
-
-### `10_correlacion_spells_inercia.R` — spells/year vs inertia duration
-Computes Pearson and Spearman correlations between annual spell count and average inertia duration (2020–2026).
-
-Key result: Spearman rho = -1.000, p < 0.001 — monotonic correlation, direct evidence for P1.
-
-Output: `results/10_correlacion_spells_inercia.txt`
-
----
-
-### `11_regresion_spread_neg_P5.R` — P5 test: flow DSR_sDAI ~ spread DSR-SSR
-Downloads daily panel from Dune (query 7352014), merges with hardcoded DSR/SSR series, and runs OLS regression of DSR_sDAI net flows on spread (continuous). Newey-West HAC (lag=7).
-
-Period: September 2024 – December 2025 (n=487 days, all with spread < 0)  
-Key result: beta_spread negative and significant (p=0.043) — empirical evidence for P5.
-
-Output: `results/11_regresion_spread_neg_P5.txt`
-
----
-
-### `12_flujos_DSR_SSR.R` — Figure 2.1: net daily flows by canal
-Downloads daily net flows by canal from Dune (query 7358680) and plots 7-day moving average for all four APD_formal canals (DSR_sDAI, SSR_Spark, SSR_dai_distribution, SSR_USDYieldManager).
-
-Note: SSR_USDYieldManager included — 32.8% of cumulative absolute volume (verified with `PIT_14_volume_check_v1.sql`).
-
-Input: Dune query 7358680  
-Output: `plots/12_flujos_DSR_SSR.png`
-
----
-
-## Theoretical Framework
-
-The paper derives deposit persistence under negative spread as a predictable consequence of optimal APD design, formalized as an (S,s) inventory policy problem with asymmetric activation costs:
-
-- **Lemma 1** (Asymmetric Irreversibility): θ_out < θ_in → endogenous inertia band
-- **Lemma 2** (Saturating Threshold Policy): d(φ_i)/d(r) = 0 in the active region
-- **Lemma 3** (Endogenous Concentration): n* ≤ D_total · r̄ / (ρ·K) → 2 APDs hold 86% of stock
-
-Five falsifiable propositions follow, validated on MakerDAO Pot microdata (January 2023 – April 2026).
-
----
-
-## Replication
-
-```r
-# Install dependencies
-install.packages(c("tidyverse", "sandwich", "lmtest", "knitr",
-                   "jsonlite", "httr", "zoo", "ggplot2"))
-
-# Set working directory to repo root
-setwd("path/to/defi-research")
-
-# Run in order — each script is autonomous (loads data via Dune API)
-source("scripts/01_chi_simulation.R")
-source("scripts/02_surplus_buffer.R")
-source("scripts/03_dsr_spread.R")
-source("scripts/04_cascade_regression.R")
-source("scripts/05_sensibilidad_delta.R")
-source("scripts/06_regresion_spread.R")
-source("scripts/07_ccf_flap_dsr.R")
-source("scripts/08_figura_stock_spread_regimen.R")
-source("scripts/09_regresion_elasticidades_clase.R")
-source("scripts/10_correlacion_spells_inercia.R")
-source("scripts/11_regresion_spread_neg_P5.R")
-source("scripts/12_flujos_DSR_SSR.R")
-```
-
-Each script loads data autonomously via the Dune Analytics API. Set `api_key` in each script before running. Dune query IDs are documented in each script header and in the queries table above.
-
----
-
-## Key Contracts
-
-| Contract | Address |
-|---|---|
-| MakerDAO Pot | `0x197e90f9fad81970ba7976f33cbd77088e5d7cf7` |
-| sDAI (SavingsDai) | `0x83f20f44975d03b1b09e64809b757c47f942beea` |
-| sUSDS | `0xa3931d71877c0e7a3148cb7eb4463524fec27fbd` |
-| Clipper ETH-A | `0xc67963a226eddd77b91ad8c421630a1b0adff270` |
-| DSPause (GSM) | `0xbE286431454714F511008713973d3B053A2d38f3` |
-
----
-
-## Contact
-
-**Facundo Villega** · facundovillega@proton.me  
-Dashboard: [dune.com/facundovillega/dunedash](https://dune.com/facundovillega/dunedash)  
-GitHub: [github.com/facundovillega231](https://github.com/facundovillega231)
+*Draft. Do not cite without permission.*
