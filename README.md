@@ -8,7 +8,7 @@
 
 This repository contains two interconnected working papers on MakerDAO/Sky protocol, built on Ethereum on-chain data retrieved via Dune Analytics. Both papers study the same protocol through complementary layers: the deposit market and the liquidation market. A third paper on decentralized governance is in preparation.
 
-**Public Dune dashboard:** [dune.com/facundovillega/pitevidences9makerdao20232025](https://dune.com/facundovillega/pitevidences9makerdao20232025)
+**Public Dune dashboard (Paper 1):** [PIT — Inertial Deposits & Monetary Transmission · MakerDAO 2020–2026](https://dune.com/facundovillega/pitevidences9makerdao20232025)
 
 ---
 
