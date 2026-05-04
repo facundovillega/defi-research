@@ -1,23 +1,20 @@
--- CAPA 2 — CP BT: concentración posicional 12-13 marzo 2020
-WITH kicks AS (
+-- CAPA 2 — CP BT: concentración posicional Black Thursday (Flipper ETH-A)
+WITH keeper_bids AS (
     SELECT
-        bytearray_to_uint256(topic1)                                    AS usr,
-        bytearray_to_uint256(bytearray_substring(data, 33, 32)) / 1e18 AS lot_eth
+        bytearray_substring(topic1, 13, 20) AS keeper,
+        COUNT(*) AS bids
     FROM ethereum.logs
     WHERE contract_address = 0xd8a04f5412223f513dc55f839574430f5ec15531
-      AND topic0 = 0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a
-      AND block_time >= TIMESTAMP '2020-03-12 00:00:00'
-      AND block_time <  TIMESTAMP '2020-03-14 00:00:00'
-),
-positions AS (
-    SELECT usr, SUM(lot_eth) AS total_lot
-    FROM kicks GROUP BY usr
+      AND bytearray_substring(topic0, 1, 4) = 0x4b43ed12
+      AND block_time >= TIMESTAMP '2020-03-12'
+      AND block_time <  TIMESTAMP '2020-03-14'
+    GROUP BY 1
 )
 SELECT
-    usr,
-    total_lot,
-    ROUND(100.0 * total_lot / SUM(total_lot) OVER (), 4) AS share_pct,
-    SUM(total_lot) OVER () AS grand_total_eth
-FROM positions
-ORDER BY total_lot DESC
+    keeper,
+    bids,
+    ROUND(100.0 * bids / SUM(bids) OVER (), 4) AS share_pct,
+    SUM(bids) OVER () AS grand_total_bids
+FROM keeper_bids
+ORDER BY bids DESC
 LIMIT 10
