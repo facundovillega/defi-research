@@ -94,7 +94,7 @@ Empirical evidence comes from MakerDAO's Pot (2023–2025): 17.572M DAI persiste
 
 ## Dune Dashboard
 
-[PIT — Inertial Deposits & Monetary Transmission · MakerDAO 2020–2026](https://dune.com/facundovillega/pitevidences9makerdao20232025)
+[PIT — Inertial Deposits & Monetary Transmission · MakerDAO 2020–2026](https://dune.com/facundovillega/pit-inertial-deposits-makerdao-2020-2026)
 
 ---
 
