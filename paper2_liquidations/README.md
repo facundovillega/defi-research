@@ -127,7 +127,7 @@ Queries are organized by analysis layer (CAPA), event-specific series (BT / LUNA
 
 ## Dune Dashboard
 
-[dune.com/facundovillega/pitevidences9makerdao20232025](https://dune.com/facundovillega/pitevidences9makerdao20232025)
+[Auction Design & Market Concentration · MakerDAO Liquidations 2020–2025](https://dune.com/facundovillega/makerdao-liquidations-2020-2025)
 
 ---
 
