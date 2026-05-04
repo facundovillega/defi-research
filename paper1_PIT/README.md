@@ -74,6 +74,7 @@ Empirical evidence comes from MakerDAO's Pot (2023–2025): 17.572M DAI persiste
 | `queries/pot_dsr_history.sql` | Full DSR history from Pot |
 | `queries/gsm_spells_por_anio.sql` | DSPause spell count by year (Table 4.1) |
 | `queries/panel_submuestra_b_regression.sql` | Panel subsample B for regression |
+| `queries/PIT_OU_spread_calibration_v1.sql` | OU spread calibration — DSR vs Aave USDC (2023–2026) |
 
 ---
 
@@ -93,7 +94,7 @@ Empirical evidence comes from MakerDAO's Pot (2023–2025): 17.572M DAI persiste
 
 ## Dune Dashboard
 
-[dune.com/facundovillega/pitevidences9makerdao20232025](https://dune.com/facundovillega/pitevidences9makerdao20232025)
+[PIT — Inertial Deposits & Monetary Transmission · MakerDAO 2020–2026](https://dune.com/facundovillega/pitevidences9makerdao20232025)
 
 ---
 
