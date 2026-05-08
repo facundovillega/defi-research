@@ -1,122 +1,117 @@
-# Paper 3 — Governance Dynamics and Information Asymmetry in Decentralized Protocols
-*Evidence from MakerDAO/Sky Emergency Spells and Voting Concentration*
+# defi-research
+Facundo Villega · Independent Research · On-chain Analysis · 2026
 
-**Working Paper v00 · In preparation · Keywords: DeFi governance · GSM · MKR · SKY · voting concentration · executive spells · governance design**
+## Overview
 
-→ Back to [repository index](../README.md)
+This repository contains three interconnected working papers on MakerDAO/Sky protocol, built on Ethereum on-chain data retrieved via Dune Analytics. The papers study the same protocol through complementary layers: the deposit market, the liquidation market, and the governance layer.
 
----
+**Public Dune dashboard (Paper 1):** [PIT — Inertial Deposits & Monetary Transmission · MakerDAO 2020–2026](https://dune.com/facundovillega/pit-inertial-deposits-makerdao-2020-2026)
 
-## Status
+**Public Dune dashboard (Paper 2):** [Auction Design & Market Concentration · MakerDAO Liquidations 2020–2025](https://dune.com/facundovillega/makerdao-liquidations-2020-2025)
 
-**In preparation.** This README documents the research design and theoretical framework. Empirical work has not yet begun.
-
----
-
-## Motivation
-
-Decentralized governance protocols face a fundamental tension between decision speed and deliberative legitimacy. MakerDAO/Sky's Governance Security Module (GSM) operationalizes this tension as a configurable time delay between spell approval and execution. This delay is the central institutional parameter studied in Papers 1 and 2 of this series; in Paper 3 it becomes the object of analysis rather than a fixed constraint.
-
-This paper studies how governance parameters — particularly the GSM Pause Delay — evolve over time, and whether the timing and structure of executive spells contain systematic patterns that are detectable on-chain prior to execution.
+**Public Dune dashboard (Paper 3):** [Governance Dynamics & Information Asymmetry · MakerDAO 2024–2025](https://dune.com/facundovillega/governance-dynamics-and-information-asymmetry-makerdao-2024-2025)
 
 ---
 
-## Central Case Study — February 2025 Executive Spell
+## Papers
 
-**Event:** Out-of-schedule executive vote — Risk Parameter Changes — February 2025
+### Paper 1 — Inertial Deposits and Monetary Transmission
+**A Theory of Programmatic Intermediation**
 
-**Key parameter changes:**
+`paper1_PIT/` · Working Paper v19 · JEL: E40 · E52 · G20 · G23 · O33
 
-| Parameter | Before | After |
-|-----------|--------|-------|
-| LSE-MKR-A debt ceiling | $20M | $45M |
-| LSE-MKR-A collateral ratio | 200% | 125% |
-| LSE-MKR-A liquidation penalty | standard | 0% |
-| LSE-MKR-A exit fee | 5% | 0% |
-| GSM Pause Delay | 30 hours | 18 hours |
+An (S,s) model of DeFi deposit markets where a fraction λ of the deposit stock is managed by autonomous contracts (Programmatic Deposit Agents, PDAs) that execute predefined logic without continuous human intervention. Five propositions with quantitative and falsifiable implications are established and tested on MakerDAO Pot data (2023–2025).
 
-The spell was executed outside the regular weekly governance schedule. It modified both risk parameters and the GSM delay simultaneously — making it an unusual event for empirical analysis.
+Key results: λ≈0.86, δ=0.5703, entry/exit elasticity ratio=8.44, DSR/Aave USDC spread as dominant DSR predictor (β=0.64, R²=0.353), Surplus Buffer precedes DSR adjustments with 1-week lag.
+
+→ [paper1_PIT/README.md](paper1_PIT/README.md)
 
 ---
 
-## Research Questions
+### Paper 2 — Auction Design and Market Concentration in MakerDAO Liquidations
+**Evidence from Black Thursday, the LUNA Crash, and the Tariff Shock**
 
-**RQ1 — Pre-positioning:** Is there statistically anomalous MKR/SKY vote weight accumulation or delegation activity in the 48–72 hours preceding out-of-schedule spells relative to regular weekly spells?
+`paper2_liquidations/` · Working Paper v09 · Keywords: DeFi liquidations · keeper market structure · Dutch auction · HHI · MEV
 
-**RQ2 — GSM as dependent variable:** Does the GSM Pause Delay exhibit a systematic trend across executive spells over the 2020–2026 period? What governance conditions predict changes to this parameter?
+Keeper market concentration across two liquidation mechanisms (Flip and Clipper) through three crisis episodes. The transition to Clipper did not reduce concentration — it increased it substantially under extreme stress. HHI varies from ~26 (LUNA Crash) to ~9,546 (Tariff Shock), demonstrating that concentration is a function of shock speed and intensity, not a stable property of the mechanism.
 
-**RQ3 — Voting concentration:** How does the HHI of voting weight distribution differ between out-of-schedule spells and regular weekly spells? Is concentration episodic or structural?
+Key results: Under the Tariff Shock, a single keeper (0xc721) captured 97.68% of ETH liquidated in a 67-minute window. Mann-Whitney tests (Monte Carlo, 50,000 permutations) confirm statistically significant differences across all event pairs.
 
-**RQ4 — Leading indicators:** Do Surplus Buffer dynamics or DSR spread series — already documented in Paper 1 — contain predictive information about the timing of out-of-schedule governance activity?
+→ [paper2_liquidations/README.md](paper2_liquidations/README.md)
 
 ---
 
-## Theoretical Connection to Papers 1 and 2
+### Paper 3 — Governance Dynamics and Information Asymmetry in Decentralized Protocols
+**Evidence from MakerDAO/Sky Executive Spells and Voting Concentration**
+
+`paper3_governance/` · Working Paper v00 · In preparation · Keywords: DeFi governance · GSM · MKR · voting concentration · executive spells · spell timing
+
+Empirical study of the Governance Security Module (GSM) Pause Delay as a variable of interest — its evolution, the conditions under which it changes, and the on-chain voting dynamics surrounding out-of-schedule executive spells. Case study: February 20, 2025 executive spell reducing the GSM delay from 30h to 18h.
+
+Preliminary results: the February 2025 out-of-schedule spell shows anomalous MKR pre-positioning (50,000 MKR re-locked 8 days prior) and required multi-actor coordination (HHI≈3,894, 17 voters) relative to the immediately subsequent regular spell (HHI≈9,931, 1 dominant voter). The GSM delay series shows systematic oscillation between 16h and 30h throughout 2024 before the anomalous reduction to 18h.
+
+→ [paper3_governance/README.md](paper3_governance/README.md)
+
+---
+
+## Theoretical Connection
+
+All three papers study MakerDAO through complementary layers and share a structural mechanism.
+
+The common mechanism is fixed integration cost K (Lemma 3, Paper 1):
 
 | Layer | Paper | Fixed cost K | Predicted n* | Observed |
-|-------|-------|-------------|--------------|----------|
-| Deposit | Paper 1 | PDA deployment cost | 2 | sDAI + Spark |
-| Liquidation | Paper 2 | MEV infrastructure | ≈1 under stress | 0xc721 (97.68%) |
-| Governance | Paper 3 | Governance coordination cost | TBD | TBD — empirical question |
+|---|---|---|---|---|
+| Deposit | Paper 1 | Cost of deploying + auditing a PDA contract | 2 | sDAI and Spark dominate |
+| Liquidation | Paper 2 | MEV execution infrastructure | ≈1 under instantaneous shocks | 0xc721 captures 97.68% |
+| Governance | Paper 3 | Governance coordination cost | TBD — empirical question | Multi-actor coordination observed in out-of-schedule spells |
 
-**GSM as structural link:** The GSM Pause Delay appears in all three papers:
-- Paper 1 → lengthens PDA inertia intervals (fixed parameter)
-- Paper 2 → operational criterion for shock classification (fixed parameter)
-- Paper 3 → variable of interest — its evolution and determinants are the object of study
+The GSM Pause Delay appears in all three papers as a structural link:
 
----
-
-## Hypotheses (Preliminary — subject to revision upon data inspection)
-
-**H1 — Pre-positioning:** Vote weight accumulation in the 48 hours preceding out-of-schedule spells exceeds that of regular spells by a statistically significant margin.
-
-**H2 — GSM trend:** The GSM Pause Delay has changed over time through executive spells. Whether the trend is monotone, episodic, or responsive to specific protocol conditions is an empirical question.
-
-**H3 — Episodic concentration:** Voting HHI is higher during out-of-schedule spells than during regular weekly spells — consistent with a lower number of active voters under compressed deliberation windows.
-
-**H4 — Surplus Buffer as signal:** Surplus Buffer dynamics predict the timing of out-of-schedule governance activity with a measurable lead, extending the CCF analysis from Paper 1 to the governance layer.
-
-*All hypotheses are falsifiable and directionally agnostic — the data may support or contradict each one.*
+- **Paper 1** → fixed parameter that lengthens PDA inertia intervals
+- **Paper 2** → operational criterion for shock classification (events resolved before the GSM can activate are ones against which governance has no available institutional response)
+- **Paper 3** → variable of interest — its evolution and determinants are the object of study
 
 ---
 
-## Proposed Empirical Strategy
+## Repository Structure
 
-**Data sources:**
-- `ethereum.logs` — DSPause Lift/Cast events (spell timeline reconstruction)
-- `ethereum.transactions` / `ethereum.traces` — MKR/SKY vote weight changes pre-spell
-- `maker_ethereum.Vow_call_flap` — Surplus Buffer proxy (Paper 1 infrastructure)
-- Sky Governance Forum — off-chain deliberation timeline
-- Dune Analytics — on-chain voting panels
-
-**Methods:**
-- Full spell inventory (2020–2026) from DSPause logs — classify regular vs. out-of-schedule
-- HHI of vote weight distribution per spell — compare across spell types
-- Event study: vote weight accumulation in pre-spell windows (24h, 48h, 72h)
-- Cross-correlation: Surplus Buffer → out-of-schedule spell frequency
-
----
-
-## Key Contracts
-
-| Contract | Address |
-|----------|---------|
-| DSPause (GSM) | `0xbe286431454714f511008713973d3b053a2d38f3` |
-| Chief (MKR voting) | TBD |
-| New Chief (SKY voting) | `0x929d9A1435662357F54AdcF64DcEE4d6b867a6f9` |
-| LSE-MKR-A (Seal Engine) | TBD |
+```
+defi-research/
+├── README.md
+├── paper1_PIT/
+│   ├── README.md
+│   ├── scripts/                    # R scripts 01–12
+│   └── queries/                    # DuneSQL queries
+├── paper2_liquidations/
+│   ├── README.md
+│   ├── scripts/                    # R scripts
+│   └── queries/                    # DuneSQL queries (~50)
+├── paper3_governance/
+│   ├── README.md
+│   └── queries/                    # DuneSQL queries (31)
+└── plots/                          # All figures (centralized)
+```
 
 ---
 
-## Pending
+## Data Sources
 
-- [ ] Full spell inventory from DSPause logs (2020–2026)
-- [ ] Classify spells: regular weekly vs. out-of-schedule
-- [ ] Build voting weight panel per spell from Chief contract
-- [ ] Confirm LSE-MKR-A and Chief contract addresses
-- [ ] Reconstruct February 2025 spell on-chain timeline
-- [ ] Cross-reference with Forum post timestamps
+- Dune Analytics: primary source for all on-chain data
+- DeFi Llama yields API: Aave USDC V3 rate series
+- Ethereum mainnet tables: `ethereum.logs`, `ethereum.transactions`, `ethereum.traces`, `erc20_ethereum.evt_Transfer`
+- MakerDAO-specific tables: `maker_ethereum.Pot_call_join`, `maker_ethereum.Vow_call_flap`, `maker_ethereum.Pot_call_file`, `maker_ethereum.dschief_call_lock`, `maker_ethereum.dschief_call_free`, `sky_ethereum.susds_call_ssr`
 
 ---
 
-*In preparation. Do not cite.*
+## Citation
+
+Villega, F. (2026a). *Inertial Deposits and Monetary Transmission: A Theory of Programmatic Intermediation*. Working Paper v19. Independent Research.
+
+Villega, F. (2026b). *Auction Design and Market Concentration in MakerDAO Liquidations: Evidence from Black Thursday, the LUNA Crash, and the Tariff Shock*. Working Paper v09. Independent Research.
+
+Villega, F. (2026c). *Governance Dynamics and Information Asymmetry in Decentralized Protocols: Evidence from MakerDAO/Sky Executive Spells and Voting Concentration*. Working Paper v00. Independent Research. In preparation.
+
+---
+
+*Draft. Do not cite without permission.*
