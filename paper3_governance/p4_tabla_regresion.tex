@@ -1,0 +1,50 @@
+
+% Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
+% Date and time: Wed, May 13, 2026 - 01:27:50
+\begin{table}[!htbp] \centering 
+  \caption{Determinantes de $\hat{\kappa}_{coord}$ — MakerDAO DSChief 2020--2025} 
+  \label{tab:kcoord_reg} 
+\begin{tabular}{@{\extracolsep{5pt}}lccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{5}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-6} 
+\\[-1.8ex] & \multicolumn{5}{c}{$\log(1 + \kappa_{coord})$} \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\ 
+\hline \\[-1.8ex] 
+ HHI & 0.0002 & 0.0002 &  & 0.0002 & 0.0001 \\ 
+  & (0.0001) & (0.0001) &  & (0.0001) & (0.0001) \\ 
+  & & & & & \\ 
+ conc: high &  &  & 0.824 &  &  \\ 
+  &  &  & (0.600) &  &  \\ 
+  & & & & & \\ 
+ $\log(1 + \text{hours})$ & 1.688$^{***}$ & 1.672$^{***}$ & 1.656$^{***}$ & 1.660$^{***}$ & 1.697$^{***}$ \\ 
+  & (0.460) & (0.453) & (0.452) & (0.483) & (0.458) \\ 
+  & & & & & \\ 
+ $n_{voters}$ & 0.161$^{*}$ & 0.164$^{*}$ & 0.165$^{*}$ & 0.164$^{*}$ & 0.157 \\ 
+  & (0.096) & (0.095) & (0.093) & (0.096) & (0.096) \\ 
+  & & & & & \\ 
+ whale present &  & 1.022 & 0.995 & 1.058 & 0.926 \\ 
+  &  & (0.937) & (0.933) & (1.036) & (0.942) \\ 
+  & & & & & \\ 
+ year &  &  &  & 0.019 &  \\ 
+  &  &  &  & (0.230) &  \\ 
+  & & & & & \\ 
+ post Sky &  &  &  &  & $-$1.214 \\ 
+  &  &  &  &  & (0.770) \\ 
+  & & & & & \\ 
+ Constant & 0.485 & 0.457 & 1.208 & $-$37.553 & 0.628 \\ 
+  & (1.948) & (1.892) & (1.670) & (464.309) & (1.924) \\ 
+  & & & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 126 & 126 & 126 & 126 & 126 \\ 
+R$^{2}$ & 0.182 & 0.190 & 0.194 & 0.190 & 0.199 \\ 
+Adjusted R$^{2}$ & 0.161 & 0.163 & 0.167 & 0.156 & 0.165 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{5}{l}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+ & \multicolumn{5}{l}{SE robustos HC3. $N=126$ (excluye \textit{micro\_spell}).} \\ 
+ & \multicolumn{5}{l}{\textit{whale\_present} $= 1$ si ventana spell $\subset$ sep--dic 2020 ($n=12$).} \\ 
+ & \multicolumn{5}{l}{Modelo (3): categoría base $=$ \textit{competitive} ($n=3$).} \\ 
+\end{tabular} 
+\end{table} 
