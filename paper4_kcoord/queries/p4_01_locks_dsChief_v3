@@ -1,0 +1,57 @@
+WITH spells AS (
+    SELECT
+        spell_address,
+        timestamp_cast AS ts_plot,
+        timestamp_lift AS ts_exec
+    FROM query_7433333
+    WHERE timestamp_cast IS NOT NULL
+      AND timestamp_lift IS NOT NULL
+      AND timestamp_lift >= timestamp_cast
+),
+locks_legacy AS (
+    SELECT block_time, bytearray_to_uint256(topic2) / 1e18 AS mkr_locked
+    FROM ethereum.logs
+    WHERE (
+        contract_address = from_hex('8e2a84d6ade1e7fffee039a35ef5f19f13057152')
+        OR contract_address = from_hex('9ef05f7f6deb616fd37ac3c959a2ddd25a54e4f5')
+    )
+    AND topic0 = from_hex('dd46706400000000000000000000000000000000000000000000000000000000')
+    AND block_time < TIMESTAMP '2020-12-07'
+),
+locks_current AS (
+    SELECT call_block_time AS block_time, wad / 1e18 AS mkr_locked
+    FROM maker_ethereum.dschief_call_lock
+    WHERE call_block_time >= TIMESTAMP '2020-12-07'
+),
+all_locks AS (
+    SELECT * FROM locks_legacy
+    UNION ALL
+    SELECT * FROM locks_current
+),
+spell_votes AS (
+    SELECT
+        s.spell_address,
+        s.ts_plot,
+        s.ts_exec,
+        l.block_time,
+        l.mkr_locked
+    FROM spells s
+    LEFT JOIN all_locks l
+        ON l.block_time <= s.ts_plot
+       AND l.block_time >= s.ts_plot - INTERVAL '14' DAY
+)
+SELECT
+    spell_address,
+    ts_plot,
+    ts_exec,
+    date_diff('second', ts_plot, ts_exec) / 3600.0        AS gsm_delay_hours,
+    MIN(block_time)                                        AS ts_first_lock,
+    COALESCE(
+        date_diff('second', MIN(block_time), ts_plot) / 3600.0,
+        0
+    )                                                      AS hours_coordination,
+    COALESCE(SUM(mkr_locked), 0)                           AS mkr_movilizado,
+    COUNT(block_time)                                      AS n_lock_events
+FROM spell_votes
+GROUP BY spell_address, ts_plot, ts_exec
+ORDER BY ts_plot
