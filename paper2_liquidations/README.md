@@ -1,21 +1,42 @@
-# Paper 2 — Auction Design and Market Concentration in MakerDAO Liquidations
-*Evidence from Black Thursday, the LUNA Crash, and the Tariff Shock*
+# P2 — Auction Design and Market Concentration in MakerDAO Liquidations
 
-**Working Paper v09 · Keywords: MakerDAO · DeFi liquidations · keeper market structure · Dutch auction · HHI · MEV**
+**Evidence from Black Thursday, the LUNA Crash, and the Tariff Shock**
 
-→ Back to [repository index](../README.md)
+Facundo Villega · Independent Research · On-chain Analysis · May 2026
+
+---
+
+**Series:** Paper 2 of 4 · Villega (2026a, 2026b, 2026c, 2026d)  
+**JEL:** D44 · G23 · L11 · G01  
+**Status:** Draft v11 · Do not cite without permission  
+**Dashboard:** [Auction Design & Market Concentration · MakerDAO Liquidations 2020–2025](https://dune.com/facundovillega)
+
+→ [Download PDF](./P2_EN.pdf)
 
 ---
 
 ## Abstract
 
-This paper studies keeper market concentration across two liquidation mechanisms in MakerDAO: the English auction (Flip, 2020–2021) and the Dutch auction (Clipper, 2021–2026). Using on-chain data from Ethereum logs and transaction traces, we document that the transition to Clipper did not reduce market concentration — it increased it substantially under extreme stress conditions.
+We study keeper market concentration across two liquidation mechanisms in MakerDAO: the English auction (Flip, 2020–2021) and the Dutch auction (Clipper, 2021–2026). Using on-chain data from Ethereum event logs and transaction traces, we document that the transition to Clipper did not reduce market concentration — it substantially increased it under extreme stress conditions.
 
-Three crisis episodes are analyzed: Black Thursday (March 2020), the LUNA Crash (May–June 2022), and the Tariff Shock (April 2025). The Herfindahl-Hirschman Index (HHI) varies dramatically across events: ~1,562 in Black Thursday, ~26 in the LUNA Crash, and ~8,371–9,546 in the Tariff Shock. This variation reveals that concentration is not a stable property of the mechanism, but a function of shock speed and intensity.
+Three crisis episodes are analyzed: Black Thursday (March 2020), the LUNA Crash (May–June 2022), and the Tariff Shock (April 2025). The HHI varies dramatically across events — ~1,562, ~26, and ~8,371–9,546 respectively — revealing that concentration is not a stable property of the mechanism, but a function of shock speed and intensity.
 
-The LUNA Crash — the only event with genuine access competition, with 399 keepers and HHI count ~26 — shows that Clipper can function as designed under moderate and prolonged stress. However, under instantaneous high-magnitude shocks such as the Tariff Shock, a single keeper (0xc721) captured 97.68% of the ETH liquidated in a 67-minute window. Mann-Whitney tests (Monte Carlo, 50,000 permutations) confirm statistically significant differences across events (BT vs. LUNA: p < 0.001, |r| = 0.846; LUNA vs. Tariff: p = 0.005, |r| = 0.438).
+The LUNA Crash (399 keepers, count HHI ~26) demonstrates that Clipper can function as designed under moderate, prolonged stress. The Tariff Shock demonstrates the opposite: a single keeper (0xc721) captured 97.68% of the ETH liquidated in a 67-minute window, operating exclusively via flash loans with no pre-positioned capital.
 
-The GSM's 48-hour delay serves as the operational criterion for shock classification: events resolved before the GSM can activate are, by definition, ones against which governance has no available institutional response.
+Mann-Whitney tests (Monte Carlo, 50,000 permutations) confirm statistically significant differences: BT vs. LUNA (p < 0.001, |r| = 0.846) and LUNA vs. Tariff (p = 0.005, |r| = 0.438).
+
+---
+
+## Position in the Series
+
+| Paper | Layer | K interpreted as | Central Finding |
+|-------|-------|-----------------|-----------------|
+| P1 — Programmatic Deposits and Monetary Transmission | Deposits (Pot/DSR) | c_gas + c_audit + κ_coord; K*≈2.93M DAI | λ≈0.86; n*=2 (sDAI+Spark, 86% stock) |
+| **P2 — Auction Design and Market Concentration in Liquidations** | **Liquidations (Clipper/Flip)** | **MEV infrastructure (latency, gas, bots)** | **Concentration = f(shock speed); Tariff Shock: n*≈1 (0xc721, 97.68% in 67 min); LUNA: n*≈399** |
+| P3 — Governance Dynamics and Information Asymmetry | Governance (DSChief/GSM) | Outgoing spell coordination cost | GSM delay endogenous; pre-positioning 10 days before cast |
+| P4 — κ_coord as a Market Variable | Governance (κ_coord empirical) | κ_coord_proxy = mkr_mobilized × gsm_delay_hours | β(log MKR)=1.13; β(gsm_delay_hours)=0.053; HHI not significant; R²=0.672 |
+
+The common thread is Lemma 3 of Villega (2026a): for any protocol layer where entry requires a fixed cost K, the number of viable agents n* is decreasing in K. In the liquidation layer, K corresponds to MEV infrastructure costs. Under this interpretation, the Tariff Shock is not an anomaly: it is the case where the liquidation window T is sufficiently short for K to become binding and only n*≈1 keeper is viable.
 
 ---
 
@@ -27,6 +48,40 @@ The GSM's 48-hour delay serves as the operational criterion for shock classifica
 | LUNA Crash (May–Jun 2022) | Clipper | ~26 | ~221 | 8.70% | 56 h |
 | Tariff Shock (Apr 2025) | Clipper | ~8,371 | ~9,546 | 97.68% | 4 h (67 min active) |
 
+*HHI scale 0–10,000. DOJ/FTC thresholds: < 1,500 competitive, 1,500–2,500 moderate, > 2,500 concentrated.*
+
+---
+
+## The Speed-Concentration Trade-off
+
+The transition to Clipper produced a comparable number of active keepers (68 vs. 73) but the HHI increased ~90% (1,562 → 2,962), with the dominant keeper's share nearly doubling (28.24% → 53.78%). However, the aggregate Clipper HHI is dominated by the Tariff Shock. Excluding that event, the Clipper HHI falls well below the DOJ/FTC moderate concentration threshold.
+
+**The trade-off does not reside in the mechanism but in its interaction with shock speed:**
+
+- Under gradual shocks (LUNA Crash, 56h): Clipper produces competitive markets (count HHI ~26, 399 keepers).
+- Under instantaneous shocks (Tariff Shock, 67 min): Clipper produces de facto monopoly (HHI ~8,371–9,546).
+
+The barrier shift: Flip concentrated capital (coordinated DAI funding networks); Clipper eliminated the capital barrier but introduced an execution infrastructure barrier (latency, contract optimization, gas management) that only becomes binding under instantaneous shocks.
+
+---
+
+## Statistical Robustness
+
+**Weighted HHI and 95% bootstrap confidence intervals (10,000 resamples):**
+
+| Event | Weighted HHI | 95% CI |
+|-------|-------------|--------|
+| Black Thursday | 4,496 | [3,851 – 5,522] |
+| LUNA Crash | 1,429 | [1,124 – 1,905] |
+| Tariff Shock | 8,868 | [4,000 – ~10,000] |
+
+**Mann-Whitney U (Monte Carlo, 50,000 permutations):**
+
+| Pair | p-value | Effect \|r\| |
+|------|---------|-------------|
+| BT vs. LUNA Crash | < 0.001 | 0.846 (very large) |
+| LUNA vs. Tariff Shock | 0.005 | 0.438 (medium) |
+
 ---
 
 ## Key Contracts
@@ -35,100 +90,59 @@ The GSM's 48-hour delay serves as the operational criterion for shock classifica
 |----------|---------|
 | Flipper ETH-A | `0xd8a04f5412223f513dc55f839574430f5ec15531` |
 | Clipper ETH-A | `0xc67963a226eddd77b91ad7c421f538d4d7b1551b` |
-| Dominant keeper — BT | `0x6066` (abbrev.) |
-| Dominant keeper — Tariff Shock | `0xc721` (abbrev.) |
+| Dominant keeper — BT | `0x6066...` |
+| Dominant keeper — Tariff Shock | `0xc721...` |
 
 ---
 
-## Scripts
+## Query Inventory
 
-| Script | Description |
-|--------|-------------|
+**Black Thursday (Flip mechanism)**
+
+| Query | Description |
+|-------|-------------|
+| `p2_bt_00_block_range.sql` | Block range delimitation |
+| `p2_bt_01_market_share.sql` | Keeper market share |
+| `p2_bt_02a/b/c_caller_*.sql` | Caller profiles — top 3 keepers |
+| `p2_bt_03–09_funding_*.sql` | Funding trees — all major keepers |
+| `p2_bt_10a_hourly_dominance.sql` | Hourly dominance profile |
+| `p2_bt_10b_gas_strategies.sql` | Gas strategies — external keepers |
+
+**Clipper mechanism**
+
+| Query | Description |
+|-------|-------------|
+| `p2_clip_01a_aggregate.sql` | Aggregate Clipper activity |
+| `p2_clip_01b_market_share.sql` | Keeper market share — full Clipper period |
+| `p2_clip_02_step1–6_*.sql` | Tariff Shock — full reconstruction (6 steps) |
+
+**CAPA layers (cross-event)**
+
+| Query | Description |
+|-------|-------------|
+| `p2_capa_02a/b/c/d_cp_*.sql` | Positional concentration — all events |
+| `p2_capa_03a/b/c_hhi_*.sql` | Hourly HHI — all events |
+| `p2_capa_06_zerobid_logit_bt.sql` | Zero-bid logit — BT individual auction data |
+| `p2_capa_07a/b/c_colateral_*.sql` | Collateral by keeper — all events |
+
+**GAP checks**
+
+| Query | Description |
+|-------|-------------|
+| `p2_gap_02_0xc721_all_clipper.sql` | 0xc721 activity across all Clipper contracts |
+| `p2_gap_03_0xc721_post_tariff.sql` | 0xc721 activity after April 6, 2025 |
+| `p2_gap_04_market_share_luna.sql` | Market share by sub-period — LUNA Crash |
+
+---
+
+## Files
+
+| File | Description |
+|------|-------------|
+| `P2_EN.pdf` | Full paper |
 | `scripts/capa4_regression.R` | Cascade regression — main model |
+| `queries/` | All 30+ DuneSQL queries organized by event and layer |
 
 ---
 
-## Queries
-
-Queries are organized by analysis layer (CAPA), event-specific series (BT / LUNA / Tariff), and gap-filling checks (GAP).
-
-### Black Thursday (Flip mechanism)
-
-| Query | Description |
-|-------|-------------|
-| `queries/p2_bt_00_block_range.sql` | Block range delimitation |
-| `queries/p2_bt_01_market_share.sql` | Keeper market share |
-| `queries/p2_bt_02a_caller_0x6066.sql` | Caller profile — dominant keeper |
-| `queries/p2_bt_02b_caller_0x9c05.sql` | Caller profile — secondary keeper |
-| `queries/p2_bt_02c_caller_0x00ab.sql` | Caller profile — tertiary keeper |
-| `queries/p2_bt_03_funding_0x6066.sql` | L1 funding tree — 0x6066 |
-| `queries/p2_bt_04_intraday_recap.sql` | Intraday activity recap |
-| `queries/p2_bt_05_upstream_0x4c8745.sql` | Upstream funding — 0x4c8745 |
-| `queries/p2_bt_06_funding_0x9c05.sql` | Funding tree — 0x9c05 |
-| `queries/p2_bt_07_funding_0xb00b.sql` | Funding tree — 0xb00b |
-| `queries/p2_bt_08_funding_0x00ab.sql` | Funding tree — 0x00ab |
-| `queries/p2_bt_09_funding_0xb400.sql` | Funding tree — 0xb400 |
-| `queries/p2_bt_10a_hourly_dominance.sql` | Hourly dominance profile |
-| `queries/p2_bt_10b_gas_strategies.sql` | Gas strategies — external keepers |
-
-### Clipper mechanism — aggregate
-
-| Query | Description |
-|-------|-------------|
-| `queries/p2_clip_01a_aggregate.sql` | Aggregate Clipper activity |
-| `queries/p2_clip_01b_market_share.sql` | Keeper market share — full Clipper period |
-| `queries/p2_clip_02_step1.sql` | Tariff Shock — step 1: active keepers |
-| `queries/p2_clip_02_step1b.sql` | Tariff Shock — step 1b: keepers on 6 Apr 2025 |
-| `queries/p2_clip_02_step2_erc20_funding.sql` | Tariff Shock — ERC20 funding sources |
-| `queries/p2_clip_02_step3_eth_in.sql` | Tariff Shock — ETH inflows |
-| `queries/p2_clip_02_step4_eth_out.sql` | Tariff Shock — ETH outflows |
-| `queries/p2_clip_02_step5_traces.sql` | Tariff Shock — transaction traces |
-| `queries/p2_clip_02_step6_tx_profile.sql` | Tariff Shock — full tx profile |
-
-### CAPA layers (cross-event analysis)
-
-| Query | Description |
-|-------|-------------|
-| `queries/p2_capa_01_h4_keeper_activity.sql` | H4: dominant keeper activity outside event window |
-| `queries/p2_capa_02a_cp_bt.sql` | Positional concentration — Black Thursday |
-| `queries/p2_capa_02b_cp_luna.sql` | Positional concentration — LUNA Crash |
-| `queries/p2_capa_02c_cp_tariff.sql` | Positional concentration — Tariff Shock |
-| `queries/p2_capa_02d_cp_clipper.sql` | Positional concentration — Clipper full period |
-| `queries/p2_capa_03a_hhi_bt.sql` | Hourly HHI — Black Thursday |
-| `queries/p2_capa_03b_hhi_luna.sql` | Hourly HHI — LUNA Crash |
-| `queries/p2_capa_03c_hhi_tariff.sql` | Hourly HHI — Tariff Shock |
-| `queries/p2_capa_05a_keepers_luna_freq.sql` | LUNA keepers — frequency distribution |
-| `queries/p2_capa_05b_keepers_luna_new.sql` | LUNA keepers — new vs. preexisting |
-| `queries/p2_capa_06_zerobid_logit_bt.sql` | Zero-bid logit — BT individual auction data |
-| `queries/p2_capa_07a_colateral_bt.sql` | Collateral by keeper — BT (Take events) |
-| `queries/p2_capa_07b_colateral_luna.sql` | Collateral by keeper — LUNA (Take events) |
-| `queries/p2_capa_07c_colateral_tariff.sql` | Collateral by keeper — Tariff Shock (Take events) |
-
-### GAP checks
-
-| Query | Description |
-|-------|-------------|
-| `queries/p2_gap_01_offsets_bt.sql` | BT offsets — from bt_02_zerobid_split |
-| `queries/p2_gap_02_0xc721_all_clipper.sql` | 0xc721 activity across all Clipper contracts |
-| `queries/p2_gap_03_0xc721_post_tariff.sql` | 0xc721 activity after 6 Apr 2025 |
-| `queries/p2_gap_04_market_share_luna.sql` | Market share by sub-period — LUNA Crash |
-
-### Supplementary
-
-| Query | Description |
-|-------|-------------|
-| `queries/p2_tariff_market_share_full.sql` | Full market share — Tariff Shock (no LIMIT) |
-| `queries/p2_luna_market_share_full.sql` | Full market share — LUNA Crash (no LIMIT) |
-| `queries/p2_keeper_temporal_profile.sql` | Temporal profile — dominant keeper |
-| `queries/p2_monthly_activity.sql` | Monthly activity — event delimitation |
-| `queries/p2_keeper_market_share_full.sql` | Market share — full period, all keepers |
-
----
-
-## Dune Dashboard
-
-[Auction Design & Market Concentration · MakerDAO Liquidations 2020–2025](https://dune.com/facundovillega/makerdao-liquidations-2020-2025)
-
----
-
-*Draft. Do not cite without permission.*
+*Villega (2026b) · Working Paper v11 · In preparation · Do not cite without permission*
