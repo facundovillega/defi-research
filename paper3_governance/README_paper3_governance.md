@@ -1,31 +1,50 @@
-# Paper 3 — Governance Dynamics and Information Asymmetry in Decentralized Protocols
-*Evidence from MakerDAO/Sky Emergency Spells and Voting Concentration*
+# P3 — Governance Dynamics and Information Asymmetry in Decentralized Protocols
 
-**Working Paper v00 · In preparation · Keywords: DeFi governance · GSM · MKR · SKY · voting concentration · executive spells · governance design**
+**Evidence from MakerDAO/Sky Executive Spells and Voting Concentration**
 
-→ Back to [repository index](../README.md)
-
----
-
-## Status
-
-**In preparation.** This README documents the research design and theoretical framework. Empirical work has not yet begun.
+Facundo Villega · Independent Research · On-chain Analysis · May 2026
 
 ---
 
-## Motivation
+**Series:** Paper 3 of 4 · Villega (2026a, 2026b, 2026c, 2026d)  
+**JEL:** D72 · D82 · G23 · O33  
+**Status:** Draft v00 · Do not cite without permission  
+**Dashboard:** [dune.com/facundovillega/governance-dynamics-and-information-asymmetry-makerdao-2024-2025](https://dune.com/facundovillega/governance-dynamics-and-information-asymmetry-makerdao-2024-2025)
 
-Decentralized governance protocols face a fundamental tension between decision speed and deliberative legitimacy. MakerDAO/Sky's Governance Security Module (GSM) operationalizes this tension as a configurable time delay between spell approval and execution. This delay is the central institutional parameter studied in Papers 1 and 2 of this series; in Paper 3 it becomes the object of analysis rather than a fixed constraint.
-
-This paper studies how governance parameters — particularly the GSM Pause Delay — evolve over time, and whether the timing and structure of executive spells contain systematic patterns that are detectable on-chain prior to execution.
+→ [Download PDF](./P3_EN.pdf)
 
 ---
 
-## Central Case Study — February 2025 Executive Spell
+## Abstract
 
-**Event:** Out-of-schedule executive vote — Risk Parameter Changes — February 2025
+We study the Governance Security Module (GSM) of MakerDAO/Sky as a dependent variable: its temporal evolution, the determinants of its changes, and the on-chain patterns of voting concentration and MKR pre-positioning preceding executive spells. The central case study is the out-of-schedule executive spell of February 20, 2025 (spell `0x1c8f5979`), which reduced the GSM delay from 30 to 18 hours while simultaneously loosening five LSE-MKR-A risk parameters.
 
-**Key parameter changes:**
+Three findings:
+
+1. **GSM as contested variable.** The delay series (17 changes, 2019–2025) exhibits a systematic 16h–30h oscillation throughout 2024 (four complete cycles, ±14h amplitude) before the anomalous reduction to 18h — a value without precedent in the historical series. The subsequent corrective response (+30h in May 2025) is the largest single upward adjustment since Black Thursday. The pattern is consistent with a contested equilibrium between coalitions with opposing preferences over institutional response speed.
+
+2. **Structured pre-positioning (H1).** For the February 2025 spell: 50,000 MKR re-locked into the dominant voting proxy on February 10 (ten days before cast) via a single-block consolidation; eight wallets voted within a 52-minute window the night before execution; one wallet activated a voting proxy for the first time thirteen days before the vote, with no prior voting activity.
+
+3. **Counterintuitive concentration result (H3).** The out-of-schedule spell exhibits *lower* voting concentration (HHI=3,894, 17 voters, dominant actor at 54.0%) than the immediately subsequent regular spell (HHI=9,931, dominant actor at 99.7%, effectively a single-voter outcome). This inverts the standard hypothesis. The result is consistent with Lemma 3 of Villega (2026a): salient out-of-schedule spells require explicit multi-actor coordination rather than single-actor capture.
+
+All findings are documented through 31 reproducible DuneSQL queries.
+
+---
+
+## Position in the Series
+
+| Paper | Layer | K interpreted as | Main Method |
+|-------|-------|-----------------|-------------|
+| P1 — Programmatic Deposits and Monetary Transmission | Deposits (Pot/DSR) | c_gas + c_audit + κ_coord; K*≈2.93M DAI | S,s model; OLS Newey-West |
+| P2 — Auction Design and Market Concentration in Liquidations | Liquidations (Clipper/Flip) | MEV infrastructure | HHI; bootstrap; Mann-Whitney |
+| **P3 — Governance Dynamics and Information Asymmetry** | **Governance (DSChief/GSM)** | **Coordination cost of salient spell** | **31 DuneSQL queries; case analysis** |
+| P4 — κ_coord as a Market Variable | Governance (κ_coord empirical) | κ_coord_proxy = mkr_mobilized × gsm_delay_hours | OLS HC3; N=217 spells |
+
+The common thread is Lemma 3 of Villega (2026a): for any protocol layer in which entry requires a fixed cost K, the number of viable agents n* is decreasing in K.
+
+---
+
+## Central Case Study — February 20, 2025 Spell (`0x1c8f5979`)
 
 | Parameter | Before | After |
 |-----------|--------|-------|
@@ -33,67 +52,9 @@ This paper studies how governance parameters — particularly the GSM Pause Dela
 | LSE-MKR-A collateral ratio | 200% | 125% |
 | LSE-MKR-A liquidation penalty | standard | 0% |
 | LSE-MKR-A exit fee | 5% | 0% |
-| GSM Pause Delay | 30 hours | 18 hours |
+| GSM Pause Delay | 30 hours | **18 hours** |
 
-The spell was executed outside the regular weekly governance schedule. It modified both risk parameters and the GSM delay simultaneously — making it an unusual event for empirical analysis.
-
----
-
-## Research Questions
-
-**RQ1 — Pre-positioning:** Is there statistically anomalous MKR/SKY vote weight accumulation or delegation activity in the 48–72 hours preceding out-of-schedule spells relative to regular weekly spells?
-
-**RQ2 — GSM as dependent variable:** Does the GSM Pause Delay exhibit a systematic trend across executive spells over the 2020–2026 period? What governance conditions predict changes to this parameter?
-
-**RQ3 — Voting concentration:** How does the HHI of voting weight distribution differ between out-of-schedule spells and regular weekly spells? Is concentration episodic or structural?
-
-**RQ4 — Leading indicators:** Do Surplus Buffer dynamics or DSR spread series — already documented in Paper 1 — contain predictive information about the timing of out-of-schedule governance activity?
-
----
-
-## Theoretical Connection to Papers 1 and 2
-
-| Layer | Paper | Fixed cost K | Predicted n* | Observed |
-|-------|-------|-------------|--------------|----------|
-| Deposit | Paper 1 | PDA deployment cost | 2 | sDAI + Spark |
-| Liquidation | Paper 2 | MEV infrastructure | ≈1 under stress | 0xc721 (97.68%) |
-| Governance | Paper 3 | Governance coordination cost | TBD | TBD — empirical question |
-
-**GSM as structural link:** The GSM Pause Delay appears in all three papers:
-- Paper 1 → lengthens PDA inertia intervals (fixed parameter)
-- Paper 2 → operational criterion for shock classification (fixed parameter)
-- Paper 3 → variable of interest — its evolution and determinants are the object of study
-
----
-
-## Hypotheses (Preliminary — subject to revision upon data inspection)
-
-**H1 — Pre-positioning:** Vote weight accumulation in the 48 hours preceding out-of-schedule spells exceeds that of regular spells by a statistically significant margin.
-
-**H2 — GSM trend:** The GSM Pause Delay has changed over time through executive spells. Whether the trend is monotone, episodic, or responsive to specific protocol conditions is an empirical question.
-
-**H3 — Episodic concentration:** Voting HHI is higher during out-of-schedule spells than during regular weekly spells — consistent with a lower number of active voters under compressed deliberation windows.
-
-**H4 — Surplus Buffer as signal:** Surplus Buffer dynamics predict the timing of out-of-schedule governance activity with a measurable lead, extending the CCF analysis from Paper 1 to the governance layer.
-
-*All hypotheses are falsifiable and directionally agnostic — the data may support or contradict each one.*
-
----
-
-## Proposed Empirical Strategy
-
-**Data sources:**
-- `ethereum.logs` — DSPause Lift/Cast events (spell timeline reconstruction)
-- `ethereum.transactions` / `ethereum.traces` — MKR/SKY vote weight changes pre-spell
-- `maker_ethereum.Vow_call_flap` — Surplus Buffer proxy (Paper 1 infrastructure)
-- Sky Governance Forum — off-chain deliberation timeline
-- Dune Analytics — on-chain voting panels
-
-**Methods:**
-- Full spell inventory (2020–2026) from DSPause logs — classify regular vs. out-of-schedule
-- HHI of vote weight distribution per spell — compare across spell types
-- Event study: vote weight accumulation in pre-spell windows (24h, 48h, 72h)
-- Cross-correlation: Surplus Buffer → out-of-schedule spell frequency
+Out-of-schedule (Thursday 06:26 UTC). The simultaneous modification of risk parameters and the institutional delay in a single spell is the analytically relevant event.
 
 ---
 
@@ -102,21 +63,25 @@ The spell was executed outside the regular weekly governance schedule. It modifi
 | Contract | Address |
 |----------|---------|
 | DSPause (GSM) | `0xbe286431454714f511008713973d3b053a2d38f3` |
-| Chief (MKR voting) | TBD |
-| New Chief (SKY voting) | `0x929d9A1435662357F54AdcF64DcEE4d6b867a6f9` |
-| LSE-MKR-A (Seal Engine) | TBD |
+| DSChief | `0xa618e54de493ec29432ebd2ca7f14efbf6ac17f7` |
+| MKR token | `0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2` |
+| Feb 2025 Spell | `0x1c8f5979a93ba0412677a9d315451de1570b3d03` |
+| Main voting proxy | `0x0a3f6849f78076aefadf113f5bed87720274ddc0` |
 
 ---
 
-## Pending
+## Query Inventory
 
-- [ ] Full spell inventory from DSPause logs (2020–2026)
-- [ ] Classify spells: regular weekly vs. out-of-schedule
-- [ ] Build voting weight panel per spell from Chief contract
-- [ ] Confirm LSE-MKR-A and Chief contract addresses
-- [ ] Reconstruct February 2025 spell on-chain timeline
-- [ ] Cross-reference with Forum post timestamps
+| Range | Content |
+|-------|---------|
+| p3_01 – p3_07 | DSPause event structure, spell inventory, GSM delay history |
+| p3_08 – p3_11 | Feb 2025 spell timeline, activity over voting proxies |
+| p3_12 – p3_20 | MKR flows by wallet, proxy detail, post-cast activity |
+| p3_21 – p3_26 | HHI comparison, Chief identification, vote delegate structure verification |
+| p3_27 – p3_31 | Net MKR weights, full HHI series, GSM delay with context |
+
+31 reproducible queries available in `paper3_governance/queries/` and on the Dune dashboard.
 
 ---
 
-*In preparation. Do not cite.*
+*Villega (2026c) · Working Paper v00 · In preparation · Do not cite without permission*
